@@ -5,11 +5,16 @@ import java.text.SimpleDateFormat;
 
 public class Resources
 {
+	public enum IntervalType {
+		DAY, WEEK, MONTH, YEAR
+	}
+	
 	public static String dbName;
 	public static String repository;
 	public static String branch;
-	public static String configFile;
 	public static String repositoryName;
+	public static IntervalType intervalType;
+	public static int interval;
 	
 	// Git log regex
 	public static final String gitLogCommit = "commit [a-z0-9]+";
