@@ -83,7 +83,8 @@ CREATE SEQUENCE tnetwork_id_seq
 
 CREATE TABLE t_networks (
     iid integer REFERENCES intervals(iid) ON DELETE CASCADE,
-    nid integer NOT NULL PRIMARY KEY DEFAULT NEXTVAL('tnetwork_id_seq'::regclass)
+    nid integer NOT NULL PRIMARY KEY DEFAULT NEXTVAL('tnetwork_id_seq'::regclass),
+    commit_date timestamp with time zone NOT NULL
 );
 
 ALTER SEQUENCE tnetwork_id_seq OWNED BY t_networks.nid;
@@ -108,7 +109,8 @@ CREATE SEQUENCE snetwork_id_seq
 
 CREATE TABLE s_networks (
     iid integer REFERENCES intervals(iid) ON DELETE CASCADE,
-    nid integer NOT NULL PRIMARY KEY DEFAULT NEXTVAL('snetwork_id_seq'::regclass)
+    nid integer NOT NULL PRIMARY KEY DEFAULT NEXTVAL('snetwork_id_seq'::regclass),
+    t_nid integer REFERENCES t_networks(nid) ON DELETE CASCADE
 );
 
 ALTER SEQUENCE snetwork_id_seq OWNED BY s_networks.nid;

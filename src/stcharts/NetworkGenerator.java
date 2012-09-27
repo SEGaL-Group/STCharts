@@ -1,5 +1,10 @@
 package stcharts;
 
+import java.util.List;
+
+import models.Commit;
+import models.Network;
+
 import git.GitController;
 import db.DatabaseConnector;
 
@@ -16,14 +21,20 @@ public class NetworkGenerator
 	
 	public void buildAllNetworks() {
 		preprocessDB(true, true);
+		db.exportNetwork(
+				technicalAlgorithm(gatherTechnicalInformation()));
+		db.exportNetwork(socialAlgorithm());
 	}
 	
 	public void buildTechnicalNetworks() {
 		preprocessDB(true, false);
+		db.exportNetwork(
+				technicalAlgorithm(gatherTechnicalInformation()));
 	}
 	
 	public void buildSocialNetworks() {
 		preprocessDB(false, true);
+		db.exportNetwork(socialAlgorithm());
 	}
 	
 	/**
@@ -46,5 +57,27 @@ public class NetworkGenerator
 			Resources.projectID = db.insertNewProject();
 		if(Resources.intervalID == -1)
 			Resources.intervalID = db.insertNewInterval(Resources.projectID);
+	}
+	
+	private List<Commit> gatherTechnicalInformation() {
+		List<Commit> commits = gc.getAllCommits();
+		for(Commit commit: commits)
+			commit.setFiles(gc.getFilesOfCommit(commit.getCommitID()));
+		
+		return commits;
+	}
+	
+	private Network technicalAlgorithm(List<Commit> commits) {
+		Network network = new Network(Network.NetworkType.TECHNICAL,
+				Resources.intervalID);
+		
+		return network;
+	}
+	
+	private Network socialAlgorithm() {
+		Network network = new Network(Network.NetworkType.SOCIAL,
+				Resources.intervalID);
+		
+		return network;
 	}
 }
