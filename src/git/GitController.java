@@ -76,6 +76,21 @@ public class GitController
 				.replace("\n", "");
 	}
 	
+	public List<String> getFilesOfCommit(String commitID) {
+		List<String> files = new ArrayList<String>();
+		
+		String output = spawner.spawnProcess(new String[] {"git", "show", "--pretty=format:",
+				"--name-only", commitID});
+		
+		String[] lines = output.split(System.getProperty("line.separator"));
+		for(int i = 0; i < lines.length; i++) {
+			if(!lines[i].isEmpty()) 
+				files.add(lines[i]);
+		}
+		
+		return files;
+	}
+	
 	public String getHead() {
 		String output = spawner.spawnProcess(new String[] {"git", "rev-parse", "HEAD"});
 		String[] lines = output.split(System.getProperty("line.separator"));

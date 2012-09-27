@@ -12,6 +12,9 @@ public class Main
 		
 		GitController gc = new GitController();
 		List<Commit> commits = gc.getAllCommits();
+		for(Commit commit: commits) {
+			commit.setFiles(gc.getFilesOfCommit(commit.getCommitID()));
+		}
 		int x = 0;
 		x = x + x;
 	}
