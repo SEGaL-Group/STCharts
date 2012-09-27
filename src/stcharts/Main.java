@@ -75,6 +75,10 @@ public class Main
 				Resources.intervalType = Resources.IntervalType.WEEK;
 				Resources.interval = 1;
 			}
+			
+			// All variables have been set up so commence network building
+			NetworkGenerator ng = new NetworkGenerator(db);
+			ng.buildNetworks();
 		}
 		catch (Exception e) {
 			e.printStackTrace();

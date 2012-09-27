@@ -14,6 +14,12 @@ public class NetworkGenerator
 		gc = new GitController();
 	}
 	
+	public void buildNetworks() {
+		cleanNetworks();
+		
+	}
 	
-
+	private void cleanNetworks() {
+		
+	}
 }
