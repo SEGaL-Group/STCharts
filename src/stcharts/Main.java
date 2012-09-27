@@ -78,7 +78,10 @@ public class Main
 			
 			// All variables have been set up so commence network building
 			NetworkGenerator ng = new NetworkGenerator(db);
-			ng.buildNetworks();
+			ng.buildAllNetworks();
+			
+			// Close the DB connection
+			db.close();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
