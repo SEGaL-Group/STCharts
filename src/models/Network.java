@@ -53,6 +53,15 @@ public class Network
 		this.nid = nid;
 		this.edges = edges;
 	}
+	
+	public boolean containsEdge(Edge edge) {
+		for(Edge e: edges) {
+			if((e.getUser_a() == edge.getUser_a() && e.getUser_b() == edge.getUser_b()) ||
+			   (e.getUser_a() == edge.getUser_b() && e.getUser_b() == edge.getUser_a()))
+				return true;
+		}
+		return false;
+	}
 
 	public NetworkType getNetworkType()
 	{

@@ -1,9 +1,15 @@
 package stcharts;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import models.Commit;
+import models.Edge;
 import models.Network;
+import models.Pair;
 
 import git.GitController;
 import db.DatabaseConnector;
@@ -21,20 +27,18 @@ public class NetworkGenerator
 	
 	public void buildAllNetworks() {
 		preprocessDB(true, true);
-		db.exportNetwork(
-				technicalAlgorithm(gatherTechnicalInformation()));
-		db.exportNetwork(socialAlgorithm());
+		technicalAlgorithm(gatherTechnicalInformation());
+		socialAlgorithm();
 	}
 	
 	public void buildTechnicalNetworks() {
 		preprocessDB(true, false);
-		db.exportNetwork(
-				technicalAlgorithm(gatherTechnicalInformation()));
+		technicalAlgorithm(gatherTechnicalInformation());
 	}
 	
 	public void buildSocialNetworks() {
 		preprocessDB(false, true);
-		db.exportNetwork(socialAlgorithm());
+		socialAlgorithm();
 	}
 	
 	/**
@@ -67,17 +71,66 @@ public class NetworkGenerator
 		return commits;
 	}
 	
-	private Network technicalAlgorithm(List<Commit> commits) {
-		Network network = new Network(Network.NetworkType.TECHNICAL,
-				Resources.intervalID);
-		
-		return network;
+	/***************************** Technical Network Section **************************/
+	
+	private void technicalAlgorithm(List<Commit> commits) {
+		for(Commit commit: commits) {
+			Network network = new Network(Network.NetworkType.TECHNICAL,
+					Resources.intervalID);
+			network.setCommit_date(new Timestamp(commit.getDate().getTime()));
+			
+			
+			List<Commit> intervalCommits = getIntervalCommits(commits, commit.getCommitID());
+			List<Pair<String, String>> filePairs = getFilePairs(intervalCommits);
+			Map<String, List<Integer>> authors = getAuthorsOfFiles(intervalCommits);
+			
+			for(Pair<String, String> pair: filePairs) {
+				List<Edge> edges = getEdgesForPair(pair, authors);
+				for(Edge edge: edges) {
+					if(!network.containsEdge(edge)) {
+						network.getEdges().add(edge);
+					}
+				}
+			}
+			
+			db.exportNetwork(network);
+		}
 	}
 	
-	private Network socialAlgorithm() {
+	private List<Commit> getIntervalCommits(List<Commit> commits, String commitID) {
+		
+		return commits;
+	}
+	
+	private List<Pair<String, String>> getFilePairs(List<Commit> commits) {
+		List<Pair<String, String>> filePairs = new ArrayList<Pair<String, String>>();
+		
+		applyPairThreshold(filePairs);
+		return filePairs;
+	}
+	
+	private void applyPairThreshold(List<Pair<String, String>> filePairs) {
+		
+	}
+	
+	private Map<String, List<Integer>> getAuthorsOfFiles(List<Commit> commits) {
+		Map<String, List<Integer>> authors = new HashMap<String, List<Integer>>();
+		
+		return authors;
+	}
+	
+	private List<Edge> getEdgesForPair(Pair<String,String> filePair, Map<String, List<Integer>> authors) {
+		List<Edge> edges = new ArrayList<Edge>();
+		
+		return edges;
+	}
+	
+	/***************************** Social Network Section **************************/
+	
+	private void socialAlgorithm() {
 		Network network = new Network(Network.NetworkType.SOCIAL,
 				Resources.intervalID);
 		
-		return network;
+		
 	}
 }
